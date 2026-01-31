@@ -183,4 +183,35 @@ Return as JSON:
         const result = JSON.parse(response.choices[0].message.content || '{}');
         return result;
     }
+
+    /**
+     * Optimize entire resume content
+     */
+    static async optimizeResume(resumeData: any): Promise<any> {
+        const prompt = `
+            You are a professional resume writer and ATS optimization expert. 
+            I will provide you with a resume data object. Your task is to enhance the content of the resume to make it more impactful, professional, and ATS-friendly.
+
+            Focus on:
+            1. Strengthening bullet points with action verbs and quantifiable results.
+            2. Improving the professional summary.
+            3. Refining skills to specific, high-value keywords.
+            4. Ensuring consistency and professional tone throughout.
+
+            Here is the resume data:
+            ${JSON.stringify(resumeData)}
+
+            Return the optimized resume data as a JSON object, maintaining the exact same structure as the input. 
+            Do NOT add any new fields or change the structure. Only enhance the string values.
+        `.trim();
+
+        const response = await openai.chat.completions.create({
+            model: 'gpt-4',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+            response_format: { type: 'json_object' }
+        });
+
+        return JSON.parse(response.choices[0].message.content || '{}');
+    }
 }
