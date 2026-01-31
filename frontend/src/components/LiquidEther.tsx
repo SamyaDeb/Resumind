@@ -1062,7 +1062,7 @@ export default function LiquidEther({
 
         // Auto-demo driver to simulate interaction without user input
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const autoDriver = new AutoDriver(Mouse, { lastUserInteraction: performance.now() } as any, {
+        const autoDriver = new AutoDriver(Mouse, { lastUserInteraction: -10000 } as any, {
             enabled: autoDemo,
             speed: autoSpeed,
             resumeDelay: autoResumeDelay,
@@ -1096,7 +1096,7 @@ export default function LiquidEther({
                 // Common and Mouse are singletons/globals in this scope, relying on them being initialized
                 Mouse.autoIntensity = props.autoIntensity;
                 Mouse.takeoverDuration = props.takeoverDuration;
-                this.lastUserInteraction = performance.now();
+                this.lastUserInteraction = -10000;
                 Mouse.onInteract = () => {
                     this.lastUserInteraction = performance.now();
                     if (this.autoDriver) this.autoDriver.forceStop();
