@@ -25,12 +25,16 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // Routes
-// import resumeRoutes from './routes/resume';
+import resumeRoutes from './routes/resume';
 import llmRoutes from './routes/llm';
+import templateRoutes from './routes/templates';
+import atsRoutes from './routes/ats';
 // import pdfRoutes from './routes/pdf';
 
-// app.use('/api/resume', resumeRoutes);
+app.use('/api/resume', resumeRoutes);
 app.use('/api/llm', llmRoutes);
+app.use('/api/templates', templateRoutes);
+app.use('/api/ats', atsRoutes);
 // app.use('/api/pdf', pdfRoutes);
 
 // Health check
