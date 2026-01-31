@@ -1243,690 +1243,301 @@ export default router;
 
 ---
 
-## Phase 5: Resume Template & Preview
+## Phase 5: Template Management (LaTeX)
 
 ### Timeline: Day 9-11
 
-### Step 5.1: Create HTML Resume Template
+### Step 5.1: Template Structure
 
-**`frontend/src/components/resume/ResumeTemplate.tsx`:**
-```typescript
-import { ResumeData } from '@/types/resume';
+We will store LaTeX templates in the backend `backend/src/templates/`. These templates will use Handlebars syntax (e.g., `{{fullName}}`) for dynamic data injection.
 
-interface Props {
-  data: ResumeData;
-}
+**`backend/src/templates/classic.tex` (Example):**
+```latex
+\documentclass[a4paper,10pt]{article}
+\usepackage[left=0.5in,right=0.5in,top=0.5in,bottom=0.5in]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
 
-export default function ResumeTemplate({ data }: Props) {
-  return (
-    <div id="resume-preview" className="resume-template bg-white p-12 shadow-lg max-w-4xl mx-auto">
-      {/* Header */}
-      <header className="border-b-2 border-gray-800 pb-4 mb-6">
-        <h1 className="text-4xl font-bold uppercase mb-2">
-          {data.personalInfo.fullName}
-        </h1>
-        <div className="text-sm text-gray-700 flex flex-wrap gap-x-4">
-          <span>{data.personalInfo.email}</span>
-          <span>{data.personalInfo.phone}</span>
-          <span>{data.personalInfo.location}</span>
-          {data.personalInfo.linkedin && (
-            <span>{data.personalInfo.linkedin}</span>
-          )}
-          {data.personalInfo.github && (
-            <span>{data.personalInfo.github}</span>
-          )}
-        </div>
-      </header>
+\begin{document}
 
-      {/* Summary */}
-      {data.summary && (
-        <section className="mb-6">
-          <h2 className="text-xl font-bold uppercase mb-3 border-b border-gray-400">
-            Professional Summary
-          </h2>
-          <p className="text-sm leading-relaxed">{data.summary}</p>
-        </section>
-      )}
+\begin{center}
+    {\huge \textbf{{{personalInfo.fullName}}}} \\ \vspace{2mm}
+    {{personalInfo.location}} | {{personalInfo.phone}} | {{personalInfo.email}} \\
+    {{#if personalInfo.linkedin}} \href{{{personalInfo.linkedin}}}{LinkedIn} {{/if}}
+    {{#if personalInfo.github}} | \href{{{personalInfo.github}}}{GitHub} {{/if}}
+\end{center}
 
-      {/* Experience */}
-      {data.experience && data.experience.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xl font-bold uppercase mb-3 border-b border-gray-400">
-            Professional Experience
-          </h2>
-          {data.experience.map((exp, index) => (
-            <div key={exp.id || index} className="mb-4">
-              <div className="flex justify-between items-baseline">
-                <h3 className="font-bold text-base">{exp.position}</h3>
-                <span className="text-sm text-gray-600">
-                  {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
-                </span>
-              </div>
-              <div className="text-sm text-gray-700 mb-2">
-                {exp.company} | {exp.location}
-              </div>
-              <ul className="list-disc list-inside text-sm space-y-1">
-                {exp.bullets.filter(b => b.trim()).map((bullet, i) => (
-                  <li key={i} className="leading-relaxed">{bullet}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </section>
-      )}
+\vspace{4mm}
 
-      {/* Education */}
-      {data.education && data.education.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xl font-bold uppercase mb-3 border-b border-gray-400">
-            Education
-          </h2>
-          {data.education.map((edu, index) => (
-            <div key={edu.id || index} className="mb-3">
-              <div className="flex justify-between items-baseline">
-                <h3 className="font-bold text-base">{edu.degree} in {edu.field}</h3>
-                <span className="text-sm text-gray-600">
-                  {edu.startDate} - {edu.endDate}
-                </span>
-              </div>
-              <div className="text-sm text-gray-700">
-                {edu.school} | {edu.location}
-                {edu.gpa && <span> | GPA: {edu.gpa}</span>}
-              </div>
-            </div>
-          ))}
-        </section>
-      )}
+{{#if summary}}
+\section*{Professional Summary}
+\hrule
+\vspace{2mm}
+{{summary}}
+\vspace{4mm}
+{{/if}}
 
-      {/* Skills */}
-      {data.skills && data.skills.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xl font-bold uppercase mb-3 border-b border-gray-400">
-            Technical Skills
-          </h2>
-          <div className="text-sm">
-            {data.skills.join(' • ')}
-          </div>
-        </section>
-      )}
+\section*{Experience}
+\hrule
+\vspace{2mm}
+{{#each experience}}
+\textbf{{{position}}} \hfill {{startDate}} - {{#if current}}Present{{else}}{{endDate}}{{/if}} \\
+\textit{{{company}}, {{location}}}
+\begin{itemize}[noitemsep,topsep=0pt]
+    {{#each bullets}}
+    \item {{this}}
+    {{/each}}
+\end{itemize}
+\vspace{3mm}
+{{/each}}
 
-      {/* Projects */}
-      {data.projects && data.projects.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xl font-bold uppercase mb-3 border-b border-gray-400">
-            Projects
-          </h2>
-          {data.projects.map((project, index) => (
-            <div key={project.id || index} className="mb-3">
-              <h3 className="font-bold text-base">{project.title}</h3>
-              <p className="text-sm mb-1">{project.description}</p>
-              <div className="text-sm text-gray-700">
-                Technologies: {project.technologies.join(', ')}
-              </div>
-            </div>
-          ))}
-        </section>
-      )}
+\section*{Education}
+\hrule
+\vspace{2mm}
+{{#each education}}
+\textbf{{{school}}} \hfill {{location}} \\
+{{degree}} in {{field}} \hfill {{startDate}} - {{endDate}}
+\vspace{3mm}
+{{/each}}
 
-      {/* Certifications */}
-      {data.certifications && data.certifications.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xl font-bold uppercase mb-3 border-b border-gray-400">
-            Certifications
-          </h2>
-          {data.certifications.map((cert, index) => (
-            <div key={cert.id || index} className="mb-2">
-              <div className="flex justify-between items-baseline">
-                <h3 className="font-semibold text-sm">{cert.name}</h3>
-                <span className="text-sm text-gray-600">{cert.date}</span>
-              </div>
-              <div className="text-sm text-gray-700">{cert.issuer}</div>
-            </div>
-          ))}
-        </section>
-      )}
+\section*{Skills}
+\hrule
+\vspace{2mm}
+\noindent
+{{#each skills}} {{this}} $\bullet$ {{/each}}
 
-      <style jsx>{`
-        @media print {
-          .resume-template {
-            padding: 0;
-            box-shadow: none;
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
+\end{document}
 ```
 
-### Step 5.2: Resume CSS Styling
+### Step 5.2: Template Service & Routes
 
-**`frontend/src/styles/resume.css`:**
-```css
-/* ATS-Friendly Resume Styles */
-
-.resume-template {
-  font-family: 'Arial', 'Helvetica', sans-serif;
-  font-size: 11pt;
-  line-height: 1.4;
-  color: #000;
-}
-
-.resume-template h1 {
-  font-size: 24pt;
-  margin-bottom: 8pt;
-}
-
-.resume-template h2 {
-  font-size: 14pt;
-  margin-bottom: 6pt;
-  padding-bottom: 2pt;
-}
-
-.resume-template h3 {
-  font-size: 11pt;
-  margin-bottom: 4pt;
-}
-
-/* Ensure proper spacing for ATS parsing */
-.resume-template section {
-  margin-bottom: 12pt;
-}
-
-.resume-template ul {
-  margin-left: 20pt;
-  margin-top: 4pt;
-}
-
-.resume-template li {
-  margin-bottom: 2pt;
-}
-
-/* Print-specific styles */
-@media print {
-  .resume-template {
-    margin: 0;
-    padding: 0.5in;
-  }
-  
-  @page {
-    margin: 0.5in;
-    size: letter;
-  }
-}
-
-/* No graphics, tables, or columns for ATS compatibility */
-.resume-template * {
-  background: none !important;
-  box-shadow: none !important;
-}
-```
-
----
-
-## Phase 6: Manual Editing with AI Prompts
-
-### Timeline: Day 12-14
-
-### Step 6.1: Section Editor Component
-
-**`frontend/src/components/editor/SectionEditor.tsx`:**
+**`backend/src/services/templateService.ts`:**
 ```typescript
-"use client";
+import fs from 'fs';
+import path from 'path';
 
-import { useState } from 'react';
-import { Wand2, Save, X } from 'lucide-react';
-import toast from 'react-hot-toast';
-
-interface AIPrompt {
-  label: string;
-  action: string;
+export interface Template {
+  id: string;
+  name: string;
   description: string;
+  previewUrl: string; // URL to an image preview
 }
 
-const AI_PROMPTS: Record<string, AIPrompt[]> = {
-  experience: [
-    { label: 'Make More Impactful', action: 'impact', description: 'Add metrics and achievements' },
-    { label: 'Add Metrics', action: 'metrics', description: 'Include quantifiable results' },
-    { label: 'Improve Clarity', action: 'clarity', description: 'Simplify and clarify language' },
-    { label: 'Optimize for ATS', action: 'ats', description: 'Add relevant keywords' },
-  ],
-  summary: [
-    { label: 'Make Concise', action: 'concise', description: 'Reduce to 2-3 sentences' },
-    { label: 'Add Impact', action: 'impact', description: 'Highlight achievements' },
-    { label: 'Optimize Keywords', action: 'keywords', description: 'Add industry terms' },
-  ],
-  skills: [
-    { label: 'Organize by Category', action: 'organize', description: 'Group related skills' },
-    { label: 'Add Missing Keywords', action: 'keywords', description: 'Suggest relevant skills' },
-  ],
-};
+const TEMPLATES: Template[] = [
+  { id: 'classic', name: 'Classic Professional', description: 'Timeless and standard.', previewUrl: '/previews/classic.png' },
+  { id: 'modern', name: 'Modern Creative', description: 'Bold for creative roles.', previewUrl: '/previews/modern.png' },
+];
 
-interface Props {
-  sectionType: string;
-  content: string;
-  onSave: (content: string) => void;
-  onCancel: () => void;
-}
-
-export default function SectionEditor({ sectionType, content, onSave, onCancel }: Props) {
-  const [editedContent, setEditedContent] = useState(content);
-  const [isEnhancing, setIsEnhancing] = useState(false);
-
-  const handleAIEnhance = async (action: string) => {
-    setIsEnhancing(true);
-    const loadingToast = toast.loading('Enhancing with AI...');
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/llm/improve-section`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: editedContent,
-          sectionType,
-          userRequest: action,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to enhance');
-
-      const { improved } = await response.json();
-      setEditedContent(improved);
-      toast.success('Content enhanced!', { id: loadingToast });
-    } catch (error) {
-      console.error('Error enhancing:', error);
-      toast.error('Failed to enhance content', { id: loadingToast });
-    } finally {
-      setIsEnhancing(false);
-    }
-  };
-
-  const prompts = AI_PROMPTS[sectionType] || [];
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="p-6 border-b flex justify-between items-center">
-          <h3 className="text-2xl font-bold capitalize">Edit {sectionType}</h3>
-          <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">
-            <X size={24} />
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Editor */}
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-medium mb-2">Content</label>
-              <textarea
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                className="w-full h-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-                placeholder="Enter content..."
-              />
-            </div>
-
-            {/* AI Prompts */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                <Wand2 className="inline mr-2" size={16} />
-                AI Enhancements
-              </label>
-              <div className="space-y-2">
-                {prompts.map((prompt) => (
-                  <button
-                    key={prompt.action}
-                    onClick={() => handleAIEnhance(prompt.action)}
-                    disabled={isEnhancing}
-                    className="w-full text-left p-3 border rounded-lg hover:bg-blue-50 hover:border-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <div className="font-semibold text-sm">{prompt.label}</div>
-                    <div className="text-xs text-gray-600 mt-1">{prompt.description}</div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Custom Prompt */}
-              <div className="mt-4">
-                <label className="block text-sm font-medium mb-2">Custom Request</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="e.g., Make it more technical"
-                    className="flex-1 px-3 py-2 border rounded-lg text-sm"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && e.currentTarget.value) {
-                        handleAIEnhance(e.currentTarget.value);
-                        e.currentTarget.value = '';
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t flex justify-end gap-4">
-          <button
-            onClick={onCancel}
-            className="px-6 py-2 border rounded-lg hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => onSave(editedContent)}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-          >
-            <Save size={16} />
-            Save Changes
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-```
-
-### Step 6.2: Editable Resume Preview
-
-**`frontend/src/components/resume/EditableResume.tsx`:**
-```typescript
-"use client";
-
-import { useState } from 'react';
-import { ResumeData } from '@/types/resume';
-import ResumeTemplate from './ResumeTemplate';
-import SectionEditor from '../editor/SectionEditor';
-import { Edit2 } from 'lucide-react';
-
-interface Props {
-  data: ResumeData;
-  onUpdate: (data: ResumeData) => void;
-}
-
-export default function EditableResume({ data, onUpdate }: Props) {
-  const [editingSection, setEditingSection] = useState<string | null>(null);
-  const [resumeData, setResumeData] = useState(data);
-
-  const handleSectionSave = (sectionType: string, content: string) => {
-    const updated = { ...resumeData, [sectionType]: content };
-    setResumeData(updated);
-    onUpdate(updated);
-    setEditingSection(null);
-  };
-
-  return (
-    <div className="relative">
-      {/* Edit Buttons Overlay */}
-      <div className="absolute top-0 right-0 p-4 space-y-2">
-        <button
-          onClick={() => setEditingSection('summary')}
-          className="flex items-center gap-2 px-3 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-50"
-        >
-          <Edit2 size={16} />
-          Edit Summary
-        </button>
-        <button
-          onClick={() => setEditingSection('experience')}
-          className="flex items-center gap-2 px-3 py-2 bg-white border rounded-lg shadow-sm hover:bg-gray-50"
-        >
-          <Edit2 size={16} />
-          Edit Experience
-        </button>
-        {/* Add more edit buttons for other sections */}
-      </div>
-
-      {/* Resume Preview */}
-      <ResumeTemplate data={resumeData} />
-
-      {/* Section Editor Modal */}
-      {editingSection && (
-        <SectionEditor
-          sectionType={editingSection}
-          content={JSON.stringify(resumeData[editingSection as keyof ResumeData], null, 2)}
-          onSave={(content) => handleSectionSave(editingSection, content)}
-          onCancel={() => setEditingSection(null)}
-        />
-      )}
-    </div>
-  );
-}
-```
-
----
-
-## Phase 7: PDF Generation & Export
-
-### Timeline: Day 15-16
-
-### Step 7.1: Backend PDF Service (Puppeteer)
-
-**`backend/src/services/pdfService.ts`:**
-```typescript
-import puppeteer from 'puppeteer';
-
-export class PDFService {
-  /**
-   * Generate PDF from HTML content
-   */
-  static async generatePDF(htmlContent: string): Promise<Buffer> {
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-
-    try {
-      const page = await browser.newPage();
-      
-      // Set content
-      await page.setContent(htmlContent, {
-        waitUntil: 'networkidle0',
-      });
-
-      // Generate PDF
-      const pdf = await page.pdf({
-        format: 'Letter',
-        printBackground: true,
-        margin: {
-          top: '0.5in',
-          right: '0.5in',
-          bottom: '0.5in',
-          left: '0.5in',
-        },
-      });
-
-      return pdf;
-    } finally {
-      await browser.close();
-    }
+export class TemplateService {
+  static getTemplates(): Template[] {
+    return TEMPLATES;
   }
 
-  /**
-   * Generate PDF with custom styling
-   */
-  static async generateStyledPDF(
-    htmlContent: string,
-    cssContent: string
-  ): Promise<Buffer> {
-    const fullHtml = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="UTF-8">
-          <style>
-            ${cssContent}
-          </style>
-        </head>
-        <body>
-          ${htmlContent}
-        </body>
-      </html>
-    `;
-
-    return this.generatePDF(fullHtml);
+  static getTemplateContent(id: string): string {
+    const filePath = path.join(__dirname, `../templates/${id}.tex`);
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Template ${id} not found`);
+    }
+    return fs.readFileSync(filePath, 'utf-8');
   }
 }
 ```
 
-### Step 7.2: PDF Routes
-
-**`backend/src/routes/pdf.ts`:**
+**`backend/src/routes/templates.ts`:**
 ```typescript
 import express from 'express';
-import { PDFService } from '../services/pdfService';
-import { storage } from '../config/firebase';
+import { TemplateService } from '../services/templateService';
 
 const router = express.Router();
 
-// Generate and download PDF
-router.post('/generate', async (req, res) => {
+router.get('/', (req, res) => {
   try {
-    const { htmlContent, cssContent } = req.body;
-
-    if (!htmlContent) {
-      return res.status(400).json({ error: 'HTML content is required' });
-    }
-
-    const pdf = await PDFService.generateStyledPDF(htmlContent, cssContent || '');
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
-    res.send(pdf);
+    const templates = TemplateService.getTemplates();
+    res.json({ templates });
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    res.status(500).json({ error: 'Failed to generate PDF' });
-  }
-});
-
-// Save PDF to Firebase Storage
-router.post('/save', async (req, res) => {
-  try {
-    const { htmlContent, cssContent, userId, resumeId } = req.body;
-
-    const pdf = await PDFService.generateStyledPDF(htmlContent, cssContent || '');
-
-    // Upload to Firebase Storage
-    const fileName = `resumes/${userId}/${resumeId}/resume.pdf`;
-    const bucket = storage.bucket();
-    const file = bucket.file(fileName);
-
-    await file.save(pdf, {
-      metadata: {
-        contentType: 'application/pdf',
-      },
-    });
-
-    // Get download URL
-    const [url] = await file.getSignedUrl({
-      action: 'read',
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-
-    res.json({ url, fileName });
-  } catch (error) {
-    console.error('Error saving PDF:', error);
-    res.status(500).json({ error: 'Failed to save PDF' });
+    res.status(500).json({ error: 'Failed to fetch templates' });
   }
 });
 
 export default router;
 ```
 
-### Step 7.3: Frontend Export Component
+---
 
-**`frontend/src/components/resume/ExportOptions.tsx`:**
+## Phase 6: AI LaTeX Generation
+
+### Timeline: Day 12-14
+
+### Step 6.1: LaTeX Generation Service
+
+**`backend/src/services/latexService.ts`:**
+```typescript
+import Handlebars from 'handlebars';
+import { TemplateService } from './templateService';
+
+export class LatexService {
+  /**
+   * Generates LaTeX code by merging data with the selected template.
+   */
+  static generateLatex(templateId: string, data: any): string {
+    // 1. Get raw template content
+    const source = TemplateService.getTemplateContent(templateId);
+
+    // 2. Compile with Handlebars
+    const template = Handlebars.compile(source);
+
+    // 3. Helper to escape special LaTeX characters
+    Handlebars.registerHelper('escapeLatex', (text) => {
+        if (!text || typeof text !== 'string') return text;
+        return text
+            .replace(/\\/g, '\\textbackslash{}')
+            .replace(/([&%$#_{}])/g, '\\$1')
+            .replace(/~/g, '\\textasciitilde{}')
+            .replace(/\^/g, '\\textasciicircum{}');
+    });
+
+    // 4. Fill template
+    return template(data);
+  }
+}
+```
+
+### Step 6.2: Frontend Code Preview
+
+**`frontend/src/components/resume/LatexPreview.tsx`:**
 ```typescript
 "use client";
-
-import { useState } from 'react';
-import { Download, FileText, Code } from 'lucide-react';
-import toast from 'react-hot-toast';
+import Editor from "@monaco-editor/react";
 
 interface Props {
-  resumeId: string;
-  htmlContent: string;
+  code: string;
 }
 
-export default function ExportOptions({ resumeId, htmlContent }: Props) {
-  const [isExporting, setIsExporting] = useState(false);
+export default function LatexPreview({ code }: Props) {
+  return (
+    <div className="h-[600px] border rounded-lg overflow-hidden shadow-lg mt-4">
+      <div className="bg-gray-800 text-white p-2 text-sm font-mono">LaTeX Source Preview</div>
+      <Editor
+        height="100%"
+        defaultLanguage="latex"
+        value={code}
+        theme="vs-dark"
+        options={{ readOnly: true, minimap: { enabled: false } }}
+      />
+    </div>
+  );
+}
+```
 
-  const downloadPDF = async () => {
-    setIsExporting(true);
-    const loadingToast = toast.loading('Generating PDF...');
+---
 
+## Phase 7: PDF Compilation & Export
+
+### Timeline: Day 15-16
+
+### Step 7.1: Setup PDF Compilation (Backend)
+
+We will use an external method (e.g. `latexonline` or custom Docker) to compile `.tex` to `.pdf`.
+
+**`backend/src/services/pdfService.ts`:**
+```typescript
+import axios from 'axios';
+
+export class PdfService {
+  static async compileLatex(latexCode: string): Promise<Buffer> {
+    const COMPILER_API = process.env.LATEX_COMPILER_URL || 'https://latex.ytotech.com/build';
+    
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/pdf/generate`, {
+      const response = await axios.post(COMPILER_API, {
+        latex: latexCode
+      }, {
+        responseType: 'arraybuffer'
+      });
+      
+      return Buffer.from(response.data);
+    } catch (error) {
+      console.error('PDF Compilation failed:', error);
+      throw new Error('Failed to generate PDF from LaTeX');
+    }
+  }
+}
+```
+
+### Step 7.2: Download Route
+
+**`backend/src/routes/resume.ts` (Add this):**
+```typescript
+import { LatexService } from '../services/latexService';
+import { PdfService } from '../services/pdfService';
+// ... existing imports
+
+router.post('/download', async (req, res) => {
+  try {
+    const { templateId, data } = req.body;
+    const latexCode = LatexService.generateLatex(templateId, data);
+    const pdfBuffer = await PdfService.compileLatex(latexCode);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="resume.pdf"');
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Download failed' });
+  }
+});
+```
+
+### Step 7.3: Frontend Download Button
+
+**`frontend/src/components/resume/DownloadButton.tsx`:**
+```typescript
+"use client";
+import React, { useState } from 'react';
+import { Download } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+export default function DownloadButton({ templateId, data }: any) {
+  const [loading, setLoading] = useState(false);
+
+  const handleDownload = async () => {
+    setLoading(true);
+    const toastId = toast.loading('Compiling PDF...');
+    
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/resume/download`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ htmlContent }),
+        body: JSON.stringify({ templateId, data })
       });
 
-      if (!response.ok) throw new Error('Failed to generate PDF');
+      if (!response.ok) throw new Error('Compilation failed');
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `resume-${resumeId}.pdf`;
+      a.download = `resume.pdf`;
+      document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
-
-      toast.success('PDF downloaded!', { id: loadingToast });
-    } catch (error) {
-      console.error('Error downloading PDF:', error);
-      toast.error('Failed to download PDF', { id: loadingToast });
+      document.body.removeChild(a);
+      
+      toast.success('Download ready!', { id: toastId });
+    } catch (e) {
+      toast.error('Failed to download PDF', { id: toastId });
     } finally {
-      setIsExporting(false);
+      setLoading(false);
     }
   };
 
-  const downloadHTML = () => {
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `resume-${resumeId}.html`;
-    a.click();
-    window.URL.revokeObjectURL(url);
-    toast.success('HTML downloaded!');
-  };
-
-  const copyHTML = () => {
-    navigator.clipboard.writeText(htmlContent);
-    toast.success('HTML copied to clipboard!');
-  };
-
   return (
-    <div className="flex gap-4 p-6 bg-white rounded-lg shadow">
-      <button
-        onClick={downloadPDF}
-        disabled={isExporting}
-        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-      >
-        <Download size={20} />
-        Download PDF
-      </button>
-
-      <button
-        onClick={downloadHTML}
-        className="flex items-center gap-2 px-6 py-3 border rounded-lg hover:bg-gray-50"
-      >
-        <FileText size={20} />
-        Download HTML
-      </button>
-
-      <button
-        onClick={copyHTML}
-        className="flex items-center gap-2 px-6 py-3 border rounded-lg hover:bg-gray-50"
-      >
-        <Code size={20} />
-        Copy HTML
-      </button>
-    </div>
+    <button 
+      onClick={handleDownload} 
+      disabled={loading}
+      className="flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 disabled:opacity-50"
+    >
+      <Download size={20} />
+      {loading ? 'Compiling...' : 'Download PDF'}
+    </button>
   );
 }
 ```
@@ -1937,196 +1548,37 @@ export default function ExportOptions({ resumeId, htmlContent }: Props) {
 
 ### Timeline: Day 17-18
 
-### Step 8.1: ATS Scoring Service
+### Step 8.1: ATS Service (Backend)
 
 **`backend/src/services/atsService.ts`:**
 ```typescript
-export interface ATSScore {
-  overallScore: number;
-  breakdown: {
-    formatting: number;
-    keywords: number;
-    sections: number;
-    readability: number;
-    length: number;
-  };
-  suggestions: string[];
-}
-
 export class ATSService {
-  /**
-   * Calculate ATS score for resume
-   */
-  static calculateScore(resumeData: any, jobKeywords: string[] = []): ATSScore {
-    const breakdown = {
-      formatting: this.scoreFormatting(resumeData),
-      keywords: this.scoreKeywords(resumeData, jobKeywords),
-      sections: this.scoreSections(resumeData),
-      readability: this.scoreReadability(resumeData),
-      length: this.scoreLength(resumeData),
-    };
-
-    const overallScore = Math.round(
-      (breakdown.formatting * 0.15 +
-       breakdown.keywords * 0.35 +
-       breakdown.sections * 0.20 +
-       breakdown.readability * 0.20 +
-       breakdown.length * 0.10)
-    );
-
-    const suggestions = this.generateSuggestions(breakdown, resumeData);
-
-    return { overallScore, breakdown, suggestions };
-  }
-
-  /**
-   * Score formatting (15%)
-   */
-  private static scoreFormatting(data: any): number {
-    let score = 100;
-
-    // Check for standard font (simulated)
-    // Check for consistent spacing
-    // Check for no special characters in headers
-    // Check for bullet points in experience
-
-    if (!data.experience?.some((exp: any) => exp.bullets?.length > 0)) {
-      score -= 20;
-    }
-
-    return Math.max(0, score);
-  }
-
-  /**
-   * Score keywords (35%)
-   */
-  private static scoreKeywords(data: any, jobKeywords: string[]): number {
-    if (jobKeywords.length === 0) return 85; // Default if no job keywords
-
-    const resumeText = JSON.stringify(data).toLowerCase();
-    const matchedKeywords = jobKeywords.filter(keyword =>
-      resumeText.includes(keyword.toLowerCase())
-    );
-
-    const matchRate = matchedKeywords.length / jobKeywords.length;
-    return Math.round(matchRate * 100);
-  }
-
-  /**
-   * Score sections (20%)
-   */
-  private static scoreSections(data: any): number {
-    const requiredSections = ['personalInfo', 'experience', 'education', 'skills'];
-    const optionalSections = ['summary', 'projects', 'certifications'];
-
+  static calculateScore(resumeData: any, jobDescription?: string) {
     let score = 0;
+    const feedback: string[] = [];
 
-    // Required sections (70 points)
-    requiredSections.forEach(section => {
-      if (data[section] && this.hasContent(data[section])) {
-        score += 17.5;
-      }
-    });
+    // 1. Content Completeness Check
+    if (resumeData.personalInfo.linkedin) score += 5;
+    if (resumeData.summary && resumeData.summary.length > 50) score += 10;
+    if (resumeData.experience.length >= 1) score += 20;
+    if (resumeData.skills.length >= 5) score += 15;
 
-    // Optional sections (30 points)
-    optionalSections.forEach(section => {
-      if (data[section] && this.hasContent(data[section])) {
-        score += 10;
-      }
-    });
-
-    return Math.min(100, Math.round(score));
-  }
-
-  /**
-   * Score readability (20%)
-   */
-  private static scoreReadability(data: any): number {
-    let score = 100;
-
-    // Check summary length (50-100 words ideal)
-    if (data.summary) {
-      const wordCount = data.summary.split(/\s+/).length;
-      if (wordCount < 30 || wordCount > 120) score -= 20;
+    // 2. Keyword Matching (if JD provided)
+    if (jobDescription) {
+       // logic to match keywords from JD with resume skills/bullets
     }
 
-    // Check bullet point length (not too long)
-    data.experience?.forEach((exp: any) => {
-      exp.bullets?.forEach((bullet: string) => {
-        if (bullet.length > 200) score -= 5;
-      });
-    });
+    // 3. Formatting Check (Simulated)
+    // Since we use LaTeX templates, we guarantee high formatting score
+    score += 20; 
 
-    return Math.max(0, score);
-  }
-
-  /**
-   * Score length (10%)
-   */
-  private static scoreLength(data: any): number {
-    const experienceCount = data.experience?.length || 0;
-    const totalBullets = data.experience?.reduce(
-      (sum: number, exp: any) => sum + (exp.bullets?.length || 0),
-      0
-    ) || 0;
-
-    // Ideal: 2-4 jobs, 3-5 bullets each
-    let score = 100;
-
-    if (experienceCount < 2) score -= 20;
-    if (experienceCount > 5) score -= 10;
-    if (totalBullets < 6) score -= 20;
-    if (totalBullets > 20) score -= 10;
-
-    return Math.max(0, score);
-  }
-
-  /**
-   * Check if section has content
-   */
-  private static hasContent(section: any): boolean {
-    if (typeof section === 'string') return section.trim().length > 0;
-    if (Array.isArray(section)) return section.length > 0;
-    if (typeof section === 'object') return Object.keys(section).length > 0;
-    return false;
-  }
-
-  /**
-   * Generate improvement suggestions
-   */
-  private static generateSuggestions(breakdown: any, data: any): string[] {
-    const suggestions: string[] = [];
-
-    if (breakdown.formatting < 90) {
-      suggestions.push('Use bullet points for all experience items');
-      suggestions.push('Ensure consistent formatting throughout');
-    }
-
-    if (breakdown.keywords < 70) {
-      suggestions.push('Add more relevant keywords from the job description');
-      suggestions.push('Include industry-standard technical terms');
-    }
-
-    if (breakdown.sections < 80) {
-      if (!data.summary) suggestions.push('Add a professional summary');
-      if (!data.projects || data.projects.length === 0) {
-        suggestions.push('Add relevant projects to showcase skills');
-      }
-    }
-
-    if (breakdown.readability < 85) {
-      suggestions.push('Keep bullet points concise (under 150 characters)');
-      suggestions.push('Use action verbs at the start of each bullet');
-    }
-
-    if (breakdown.length < 80) {
-      suggestions.push('Add 3-5 bullet points per job position');
-      suggestions.push('Include at least 2-3 relevant work experiences');
-    }
-
-    return suggestions;
+    return { 
+      score: Math.min(score, 100), 
+      feedback 
+    };
   }
 }
+
 ```
 
 ### Step 8.2: ATS Score Display Component
