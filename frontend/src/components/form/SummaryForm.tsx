@@ -46,13 +46,13 @@ export default function SummaryForm({ initialData = '', onSubmit, onBack, onComp
                 <button
                     type="button"
                     onClick={onBack}
-                    className="flex-1 px-6 py-3 rounded-lg border border-neutral-600 text-neutral-300 hover:bg-neutral-800 transition-all font-medium"
+                    className="flex-1 px-6 py-3 rounded-lg bg-white text-black hover:bg-neutral-200 transition-all font-bold text-lg shadow-lg hover:shadow-white/20"
                 >
                     Back
                 </button>
                 <button
                     type="submit"
-                    className="flex-1 bg-green-500 text-black py-3 rounded-lg hover:bg-green-400 transition-all font-bold shadow-lg hover:shadow-green-500/20"
+                    className="flex-1 px-6 py-3 rounded-lg bg-green-500 text-black hover:bg-green-400 transition-all font-bold text-lg shadow-lg hover:shadow-green-500/20"
                 >
                     Complete Resume
                 </button>
