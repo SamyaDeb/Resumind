@@ -1,5 +1,6 @@
 export interface PersonalInfo {
     fullName?: string;
+    title?: string;
     email?: string;
     phone?: string;
     location?: string;
@@ -35,6 +36,7 @@ export interface Project {
     title: string;
     description: string;
     technologies: string[];
+    year?: string;
     link?: string;
 }
 
