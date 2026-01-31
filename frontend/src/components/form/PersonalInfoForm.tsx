@@ -123,9 +123,9 @@ export default function PersonalInfoForm({ initialData, onSubmit, onNext }: Prop
             <div className="pt-4">
                 <button
                     type="submit"
-                    className="w-full bg-white text-black py-3 rounded-lg hover:bg-neutral-200 transition-all font-bold text-lg"
+                    className="w-full px-6 py-3 rounded-lg bg-green-500 text-black hover:bg-green-400 transition-all font-bold text-lg shadow-lg hover:shadow-green-500/20"
                 >
-                    Next: Experience
+                    Next
                 </button>
             </div>
         </form>
