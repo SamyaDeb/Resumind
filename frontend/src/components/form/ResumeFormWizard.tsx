@@ -21,9 +21,9 @@ const STEPS = [
     'Summary'
 ];
 
-export default function ResumeFormWizard({ onComplete }: { onComplete: (data: ResumeData) => void }) {
+export default function ResumeFormWizard({ onComplete, initialData }: { onComplete: (data: ResumeData) => void, initialData?: Partial<ResumeData> }) {
     const [currentStep, setCurrentStep] = useState(0);
-    const [resumeData, setResumeData] = useState<Partial<ResumeData>>({});
+    const [resumeData, setResumeData] = useState<Partial<ResumeData>>(initialData || {});
 
     const updateData = (key: string, value: any) => {
         setResumeData(prev => ({ ...prev, [key]: value }));

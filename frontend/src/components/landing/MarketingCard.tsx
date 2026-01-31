@@ -9,7 +9,7 @@ export default function MarketingCard() {
             {/* Top Section: Heading + Arrow + CTA */}
             <div className="flex flex-col items-center text-center mb-12">
                 <h2 className="text-3xl md:text-5xl font-bold mb-4 text-neutral-900 leading-tight">
-                    Create a resume that <span className="text-blue-600">gets results</span>
+                    Create a resume that <span className="text-violet-600">gets results</span>
                 </h2>
 
                 <div className="w-full max-w-xs h-16 md:h-24 relative mb-6">
@@ -24,7 +24,7 @@ export default function MarketingCard() {
 
                 <Link
                     href="/builder"
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-transform hover:scale-105 shadow-lg shadow-blue-600/30"
+                    className="bg-violet-600 hover:bg-violet-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-transform hover:scale-105 shadow-lg shadow-violet-600/30"
                 >
                     Choose a template
                 </Link>

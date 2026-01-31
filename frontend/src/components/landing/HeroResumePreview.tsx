@@ -44,7 +44,7 @@ export default function HeroResumePreview() {
 
                     {/* Summary */}
                     <div className="space-y-1.5">
-                        <h4 className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Professional Summary</h4>
+                        <h4 className="text-[10px] font-bold text-violet-600 uppercase tracking-wider">Professional Summary</h4>
                         <div className="space-y-1">
                             <div className="h-2 w-full bg-neutral-100 rounded-sm"></div>
                             <div className="h-2 w-[95%] bg-neutral-100 rounded-sm"></div>
@@ -54,7 +54,7 @@ export default function HeroResumePreview() {
 
                     {/* Skills */}
                     <div className="space-y-2">
-                        <h4 className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Skills</h4>
+                        <h4 className="text-[10px] font-bold text-violet-600 uppercase tracking-wider">Skills</h4>
                         <div className="flex flex-wrap gap-1.5">
                             {['React', 'Next.js', 'TypeScript', 'Node.js', 'Tailwind', 'AI Integration'].map((skill, i) => (
                                 <span key={i} className="px-2 py-0.5 bg-neutral-50 border border-neutral-100 text-[9px] text-neutral-600 rounded-md font-medium">
@@ -66,9 +66,9 @@ export default function HeroResumePreview() {
 
                     {/* Experience */}
                     <div className="space-y-3">
-                        <h4 className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Work Experience</h4>
+                        <h4 className="text-[10px] font-bold text-violet-600 uppercase tracking-wider">Work Experience</h4>
 
-                        <div className="pl-2 border-l-2 border-blue-50 space-y-1">
+                        <div className="pl-2 border-l-2 border-violet-50 space-y-1">
                             <div className="flex justify-between items-baseline mb-1">
                                 <div className="h-2.5 w-24 bg-neutral-200 rounded-sm"></div>
                                 <div className="h-2 w-12 bg-neutral-100 rounded-sm"></div>
@@ -78,7 +78,7 @@ export default function HeroResumePreview() {
                             <div className="h-2 w-[80%] bg-neutral-50 rounded-sm"></div>
                         </div>
 
-                        <div className="pl-2 border-l-2 border-blue-50 space-y-1">
+                        <div className="pl-2 border-l-2 border-violet-50 space-y-1">
                             <div className="flex justify-between items-baseline mb-1">
                                 <div className="h-2.5 w-20 bg-neutral-200 rounded-sm"></div>
                                 <div className="h-2 w-12 bg-neutral-100 rounded-sm"></div>
@@ -92,7 +92,7 @@ export default function HeroResumePreview() {
 
                 {/* AI Suggestions Overlay Effect */}
                 <div className="absolute top-1/2 right-[-10px] translate-x-0 space-y-2 pointer-events-none z-30">
-                    <div className="bg-white px-3 py-2 rounded-lg shadow-xl border border-blue-100 flex items-center gap-2 animate-bounce">
+                    <div className="bg-white px-3 py-2 rounded-lg shadow-xl border border-violet-100 flex items-center gap-2 animate-bounce">
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                         <span className="text-[10px] font-semibold text-neutral-700">Resume Score: 98/100</span>
                     </div>

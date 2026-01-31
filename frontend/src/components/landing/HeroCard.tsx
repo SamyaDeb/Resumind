@@ -12,7 +12,7 @@ export default function HeroCard() {
             <div className="flex-1 flex flex-col justify-center z-10">
                 <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-neutral-900 mb-6 leading-tight">
                     India's Top <br />
-                    <span className="text-blue-600">Resume Templates</span>
+                    <span className="text-violet-600">Resume Templates</span>
                 </h1>
 
                 <p className="text-lg text-neutral-600 mb-8 max-w-md leading-relaxed">
@@ -21,14 +21,14 @@ export default function HeroCard() {
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
                     <Link
-                        href="/builder"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-center transition-transform hover:scale-105 shadow-lg shadow-blue-600/30"
+                        href="/login"
+                        className="bg-violet-600 hover:bg-violet-700 text-white font-bold py-4 px-8 rounded-full text-center transition-transform hover:scale-105 shadow-lg shadow-violet-600/30"
                     >
                         Create new resume
                     </Link>
                     <Link
                         href="/upload"
-                        className="bg-white hover:bg-neutral-50 text-blue-600 border-2 border-blue-600 font-bold py-4 px-8 rounded-full text-center transition-transform hover:scale-105"
+                        className="bg-white hover:bg-neutral-50 text-violet-600 border-2 border-violet-600 font-bold py-4 px-8 rounded-full text-center transition-transform hover:scale-105"
                     >
                         Optimize my resume
                     </Link>
