@@ -7,6 +7,7 @@ import { PersonalInfo } from '@/types/resume';
 
 const schema = z.object({
     fullName: z.string().optional().or(z.literal('')),
+    title: z.string().optional().or(z.literal('')),
     email: z.string().email('Invalid email address').optional().or(z.literal('')),
     phone: z.string().optional().or(z.literal('')),
     location: z.string().optional().or(z.literal('')),
@@ -52,6 +53,18 @@ export default function PersonalInfoForm({ initialData, onSubmit, onNext }: Prop
                     />
                     {errors.fullName && (
                         <p className="text-red-400 text-sm mt-1">{errors.fullName.message}</p>
+                    )}
+                </div>
+
+                <div>
+                    <label className={labelClass}>Professional Title</label>
+                    <input
+                        {...register('title')}
+                        className={inputClass}
+                        placeholder="Senior Software Engineer"
+                    />
+                    {errors.title && (
+                        <p className="text-red-400 text-sm mt-1">{errors.title.message}</p>
                     )}
                 </div>
 
