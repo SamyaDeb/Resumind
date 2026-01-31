@@ -10,10 +10,19 @@
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   will-change: scroll-position;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+.scroll-stack-scroller::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 .scroll-stack-inner {
-  padding: calc(20vh + 100px) 5rem 50rem;
+  padding: calc(20vh + 100px) 5rem calc(50vh + 100px);
   min-height: 100vh;
 }
 

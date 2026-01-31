@@ -65,3 +65,14 @@ export interface ResumeData {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export interface ATSScore {
+    overallScore: number;
+    breakdown: {
+        completeness: number;
+        keywords: number;
+        formatting: number;
+        impact: number;
+    };
+    suggestions: string[];
+}
