@@ -62,17 +62,25 @@ export class TemplateService {
         return TEMPLATES.find(template => template.id === id);
     }
 
+    private static cache: Map<string, string> = new Map();
+
     /**
      * Get template content (LaTeX source code)
      */
     static getTemplateContent(id: string): string {
+        if (TemplateService.cache.has(id)) {
+            return TemplateService.cache.get(id)!;
+        }
+
         const filePath = path.join(__dirname, `../templates/${id}.tex`);
 
         if (!fs.existsSync(filePath)) {
             throw new Error(`Template ${id} not found`);
         }
 
-        return fs.readFileSync(filePath, 'utf-8');
+        const content = fs.readFileSync(filePath, 'utf-8');
+        TemplateService.cache.set(id, content);
+        return content;
     }
 
     /**
