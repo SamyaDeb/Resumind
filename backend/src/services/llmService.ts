@@ -1,8 +1,12 @@
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 
+import NodeCache from 'node-cache';
+
 dotenv.config();
 
+// Cache TTL: 1 hour (3600 seconds)
+const cache = new NodeCache({ stdTTL: 3600 });
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
@@ -15,6 +19,11 @@ export class LLMService {
         bulletPoint: string,
         context: { position: string; company: string; keywords?: string[] }
     ): Promise<string> {
+        // Cache Key
+        const cacheKey = `enhance_bullet_${bulletPoint}_${JSON.stringify(context)}`;
+        const cached = cache.get<string>(cacheKey);
+        if (cached) return cached;
+
         const prompt = `
 You are a professional resume writer specializing in ATS optimization.
 
@@ -44,7 +53,11 @@ Return ONLY the enhanced bullet point, no quotes or explanations.
             max_tokens: 200,
         });
 
-        return response.choices[0].message.content?.trim() || bulletPoint;
+        const result = response.choices[0].message.content?.trim() || bulletPoint;
+
+        // Save to cache
+        cache.set(cacheKey, result);
+        return result;
     }
 
     /**
