@@ -30,7 +30,8 @@ export default function ProjectsForm({ initialData = [], onSubmit, onNext, onBac
         title: '',
         link: '',
         technologies: '',
-        description: ''
+        description: '',
+        year: ''
     });
 
     const handleAddProject = () => {
@@ -48,14 +49,16 @@ export default function ProjectsForm({ initialData = [], onSubmit, onNext, onBac
             title: newProject.title,
             link: newProject.link,
             description: newProject.description,
-            technologies: newProject.technologies.split(',').map(t => t.trim()).filter(Boolean)
+            technologies: newProject.technologies.split(',').map(t => t.trim()).filter(Boolean),
+            year: newProject.year
         });
 
         setNewProject({
             title: '',
             link: '',
             technologies: '',
-            description: ''
+            description: '',
+            year: ''
         });
 
         toast.success("Project added!");
@@ -90,6 +93,16 @@ export default function ProjectsForm({ initialData = [], onSubmit, onNext, onBac
                             onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
                             className={inputClass}
                             placeholder="e.g. AI Content Generator"
+                        />
+                    </div>
+
+                    <div>
+                        <label className={labelClass}>Year</label>
+                        <input
+                            value={newProject.year}
+                            onChange={(e) => setNewProject({ ...newProject, year: e.target.value })}
+                            className={inputClass}
+                            placeholder="2024"
                         />
                     </div>
 
@@ -143,6 +156,7 @@ export default function ProjectsForm({ initialData = [], onSubmit, onNext, onBac
                         <input type="hidden" {...register(`projects.${index}.title`)} />
                         <input type="hidden" {...register(`projects.${index}.link`)} />
                         <input type="hidden" {...register(`projects.${index}.description`)} />
+                        <input type="hidden" {...register(`projects.${index}.year`)} />
                         {field.technologies.map((tech, i) => (
                             <input key={i} type="hidden" {...register(`projects.${index}.technologies.${i}`)} />
                         ))}
