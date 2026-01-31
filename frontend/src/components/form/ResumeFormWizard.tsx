@@ -36,14 +36,14 @@ export default function ResumeFormWizard({ onComplete }: { onComplete: (data: Re
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 md:p-8">
+        <div className="max-w-6xl mx-auto p-6 md:p-8">
             {/* Progress Bar */}
             <div className="mb-12">
                 <div className="flex justify-between mb-4 px-2">
                     {STEPS.map((step, index) => (
                         <div
                             key={step}
-                            className={`text-sm font-medium transition-colors duration-300 hidden md:block ${index <= currentStep ? 'text-purple-400' : 'text-neutral-600'
+                            className={`text-lg font-bold font-['Poppins'] transition-colors duration-300 hidden md:block ${index <= currentStep ? 'text-purple-400' : 'text-neutral-600'
                                 }`}
                         >
                             {step}
@@ -56,7 +56,7 @@ export default function ResumeFormWizard({ onComplete }: { onComplete: (data: Re
                 </div>
 
                 {/* Progress Track */}
-                <div className="h-1 bg-neutral-800 rounded-full overflow-hidden">
+                <div className="h-3 bg-neutral-800 rounded-full overflow-hidden">
                     <div
                         className="h-full bg-gradient-to-r from-purple-600 to-pink-500 rounded-full transition-all duration-500 ease-out"
                         style={{ width: `${((currentStep + 1) / STEPS.length) * 100}%` }}
