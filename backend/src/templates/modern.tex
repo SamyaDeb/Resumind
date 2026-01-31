@@ -1,0 +1,166 @@
+%-------------------------
+% Resume in Latex
+% Author: Samya Deb Biswas
+% Adapted for AI Resume Builder
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{\item\small{#1 \vspace{-2pt}}}
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-6pt}
+}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape {{escapeLatex personalInfo.fullName}} } \\ \vspace{4pt}
+    {{#if personalInfo.title}}
+    \textbf{\Large \scshape {{escapeLatex personalInfo.title}} } \\ \vspace{4pt}
+    {{/if}}
+    \small 
+    {{#if personalInfo.phone}}
+    \faPhone\ {{escapeLatex personalInfo.phone}} ~ 
+    {{/if}}
+    {{#if personalInfo.email}}
+    \href{mailto:{{personalInfo.email}} }{\faEnvelope\ \underline{ {{escapeLatex personalInfo.email}} }} ~ 
+    {{/if}}
+    {{#if personalInfo.linkedin}}
+    \href{ {{personalInfo.linkedin}} }{\faLinkedin\ \underline{LinkedIn}} 
+    {{/if}}
+    {{#if personalInfo.github}}
+    \href{ {{personalInfo.github}} }{\faGithub\ \underline{GitHub}}
+    {{/if}}
+    {{#if personalInfo.portfolio}}
+    \href{ {{personalInfo.portfolio}} }{\faGlobe\ \underline{Portfolio}}
+    {{/if}}
+\end{center}
+
+%-----------SUMMARY-----------
+{{#if summary}}
+\section{Summary}
+{{escapeLatex summary}}
+{{/if}}
+
+%-----------SKILLS-----------
+{{#if skills}}
+\section{Skills}
+{{#each skills}}
+\textbf{ {{escapeLatex category}}: } {{escapeLatex skillsList}} \\
+{{/each}}
+{{/if}}
+
+%-----------AWARDS-----------
+{{#if certifications}}
+\section{Awards \& Certifications}
+\resumeItemListStart
+{{#each certifications}}
+  \resumeItem{\textbf{ {{escapeLatex name}} {{#if date}}({{escapeLatex date}}){{/if}}: } {{escapeLatex description}} }
+{{/each}}
+\resumeItemListEnd
+{{/if}}
+
+%-----------EXPERIENCE-----------
+{{#if experience}}
+\section{Experience}
+\resumeSubHeadingListStart
+{{#each experience}}
+  \resumeSubheading
+    { {{escapeLatex position}} }{ {{escapeLatex duration}} }
+    { {{escapeLatex company}} }{ {{escapeLatex location}} }
+    \resumeItemListStart
+      {{#each bullets}}
+      \resumeItem{ {{escapeLatex this}} }
+      {{/each}}
+    \resumeItemListEnd
+{{/each}}
+\resumeSubHeadingListEnd
+{{/if}}
+
+%-----------PROJECTS-----------
+{{#if projects}}
+\section{Projects}
+\resumeSubHeadingListStart
+{{#each projects}}
+  \resumeProjectHeading
+      {\textbf{ {{escapeLatex title}} } {{#if technologies}} $|$ \emph{ {{escapeLatex technologies}} } {{/if}} }{ {{escapeLatex year}} }
+      \resumeItemListStart
+        {{#if description}}
+        \resumeItem{ {{escapeLatex description}} }
+        {{/if}}
+        {{#each bullets}}
+        \resumeItem{ {{escapeLatex this}} }
+        {{/each}}
+      \resumeItemListEnd
+{{/each}}
+\resumeSubHeadingListEnd
+{{/if}}
+
+%-----------EDUCATION-----------
+{{#if education}}
+\section{Education}
+\resumeSubHeadingListStart
+{{#each education}}
+  \resumeSubheading
+    { {{escapeLatex degree}} {{#if field}}in {{escapeLatex field}}{{/if}} }{Graduated: {{escapeLatex graduationYear}} }
+    { {{escapeLatex school}} }{ {{#if gpa}}CGPA: {{escapeLatex gpa}}{{/if}} }
+{{/each}}
+\resumeSubHeadingListEnd
+{{/if}}
+
+\end{document}
