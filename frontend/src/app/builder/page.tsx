@@ -200,6 +200,7 @@ export default function BuilderPage() {
             localStorage.removeItem('resumeDraft');
             toast.success('Resume saved successfully!', { id: toastId });
             setFinalData(data); // Switch view to download/preview
+            setInitialData(data); // Update initialData so editing keeps changes
         } catch (error) {
             console.error(error);
             toast.error('Failed to save data', { id: toastId });
@@ -208,24 +209,24 @@ export default function BuilderPage() {
 
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-    const generatePreview = async () => {
-        try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/resume/download`, {
-                templateId: 'modern',
-                data: finalData
-            }, {
-                responseType: 'blob'
-            });
-
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
-            setPreviewUrl(url);
-        } catch (error) {
-            console.error('Failed to generate preview', error);
-        }
-    };
-
     useEffect(() => {
         if (finalData) {
+            const generatePreview = async () => {
+                try {
+                    console.log('Generating preview with data:', JSON.stringify(finalData.personalInfo));
+                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/resume/download`, {
+                        templateId: 'modern',
+                        data: finalData
+                    }, {
+                        responseType: 'blob'
+                    });
+
+                    const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+                    setPreviewUrl(url);
+                } catch (error) {
+                    console.error('Failed to generate preview', error);
+                }
+            };
             generatePreview();
         }
     }, [finalData]);
