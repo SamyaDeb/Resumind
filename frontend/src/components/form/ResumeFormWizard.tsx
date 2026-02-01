@@ -148,7 +148,17 @@ const DUMMY_DATA: ResumeData = {
 
 export default function ResumeFormWizard({ onComplete, initialData }: { onComplete: (data: ResumeData) => void, initialData?: Partial<ResumeData> }) {
     const [currentStep, setCurrentStep] = useState(0);
-    const [resumeData, setResumeData] = useState<Partial<ResumeData>>(initialData || {});
+    // Use DUMMY_DATA if initialData is empty or null, effectively auto-filling the form
+    const [resumeData, setResumeData] = useState<Partial<ResumeData>>(
+        (initialData && Object.keys(initialData).length > 0) ? initialData : DUMMY_DATA
+    );
+
+    // Sync resumeData when initialData prop changes from parent
+    useEffect(() => {
+        if (initialData && Object.keys(initialData).length > 0) {
+            setResumeData(initialData);
+        }
+    }, [initialData]);
 
     // Save to localStorage whenever resumeData changes
     const updateData = (key: string, value: any) => {
@@ -162,6 +172,7 @@ export default function ResumeFormWizard({ onComplete, initialData }: { onComple
 
     const finalComplete = (summary: string) => {
         const finalData = { ...resumeData, summary } as ResumeData;
+        console.log('Final data being sent to parent:', JSON.stringify(finalData.personalInfo));
         setResumeData(finalData);
         onComplete(finalData);
     }
