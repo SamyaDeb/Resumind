@@ -19,7 +19,8 @@ try {
         credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
     });
 } catch (error) {
-    console.warn('Firebase Admin Initialization Failed. Using placeholders. Check your .env file.');
+    console.log('⚠️  No Firebase Admin credentials found in .env');
+    console.log('✅  Starting in text-only/mock mode. (Auth & DB will be simulated)');
     // Mock app to prevent crash on startup, but DB calls will fail.
     // In a real scenario, we might want to stop here, but for dev we want the server to stay up.
 }

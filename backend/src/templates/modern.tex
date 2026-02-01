@@ -65,13 +65,19 @@
 \newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
 
+\hypersetup{
+    pdftitle={{personalInfo.fullName}} - Resume,
+    pdfauthor={{personalInfo.fullName}},
+    urlcolor=blue
+}
+
 \begin{document}
 
 %----------HEADING----------
 \begin{center}
     {\Huge \scshape {{escapeLatex personalInfo.fullName}} } \\ \vspace{4pt}
     {{#if personalInfo.title}}
-    \textbf{\Large \scshape {{escapeLatex personalInfo.title}} } \\ \vspace{4pt}
+    {\Large \scshape {{escapeLatex personalInfo.title}} } \\ \vspace{4pt}
     {{/if}}
     \small 
     {{#if personalInfo.phone}}
