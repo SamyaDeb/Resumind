@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { ResumeData } from '@/types/resume';
 import { Toaster, toast } from 'react-hot-toast';
+import Navbar from '@/components/Navbar';
 
 // Lazy load the sensitive/heavy form wizard
 const ResumeFormWizard = dynamic(() => import('@/components/form/ResumeFormWizard'), {
@@ -139,7 +140,7 @@ const SAMPLE_RESUME_DATA: Partial<ResumeData> = {
 export default function BuilderPage() {
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
-    const [initialData, setInitialData] = useState<Partial<ResumeData> | null>(SAMPLE_RESUME_DATA);
+    const [initialData, setInitialData] = useState<Partial<ResumeData> | null>(null);
     const [loadingData, setLoadingData] = useState(true);
     const [finalData, setFinalData] = useState<ResumeData | null>(null);
 
@@ -153,20 +154,33 @@ export default function BuilderPage() {
 
     const fetchResumeData = async () => {
         try {
+            // First check localStorage for draft data
+            const savedDraft = localStorage.getItem('resumeDraft');
+            if (savedDraft) {
+                const draftData = JSON.parse(savedDraft);
+                setInitialData(draftData);
+                toast.success('Loaded your draft');
+                setLoadingData(false);
+                return;
+            }
+
+            // Then try to fetch from server
             const token = await user?.getIdToken();
             const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/resume`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
             if (response.data.exists && response.data.data) {
-                // Only replace sample data if user has actual saved data
                 setInitialData(response.data.data);
                 toast.success('Loaded your saved resume');
+            } else {
+                // No saved data, start with empty form
+                setInitialData({});
             }
-            // If no saved resume, keep the SAMPLE_RESUME_DATA that was set on initialization
         } catch (error) {
             console.error('Failed to fetch resume', error);
-            // On error, keep sample data for testing
+            // On error, start with empty form
+            setInitialData({});
         } finally {
             setLoadingData(false);
         }
@@ -182,6 +196,8 @@ export default function BuilderPage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
+            // Clear draft from localStorage after successful save
+            localStorage.removeItem('resumeDraft');
             toast.success('Resume saved successfully!', { id: toastId });
             setFinalData(data); // Switch view to download/preview
         } catch (error) {
@@ -219,7 +235,8 @@ export default function BuilderPage() {
     if (finalData) {
         return (
             <div className="relative min-h-screen overflow-hidden font-sans py-10 px-4">
-                <div className="max-w-6xl mx-auto bg-white rounded-lg p-8 shadow-2xl">
+                <Navbar />
+                <div className="max-w-6xl mx-auto bg-white rounded-lg p-8 shadow-2xl mt-20">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Your Resume is Ready!</h2>
 
                     <div className="flex flex-col lg:flex-row gap-8">
@@ -267,8 +284,9 @@ export default function BuilderPage() {
     }
 
     return (
-        <div className="relative min-h-screen overflow-hidden font-sans">
-            <div className="relative z-10 py-10">
+        <div className="relative min-h-screen font-sans">
+            <Navbar />
+            <div className="relative z-10 py-10 pt-28">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-8">
                         <h1 className="text-4xl font-bold text-white tracking-tighter mb-2">Build Your Resume</h1>

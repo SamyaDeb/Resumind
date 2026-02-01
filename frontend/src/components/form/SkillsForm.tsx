@@ -34,6 +34,15 @@ export default function SkillsForm({ initialData = [], onSubmit, onNext, onBack 
         });
     });
 
+    useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            setSkillGroups(SKILL_CATEGORIES.map(category => {
+                const existing = initialData.find(g => g.category === category);
+                return existing || { category, items: [] };
+            }));
+        }
+    }, [initialData]);
+
     const [inputs, setInputs] = useState<Record<string, string>>({});
     const [activeSuggestion, setActiveSuggestion] = useState<string | null>(null);
 

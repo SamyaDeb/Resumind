@@ -3,7 +3,7 @@
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Project } from '@/types/resume';
 import { Plus, Trash2, Github, ExternalLink, Code2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface Props {
@@ -14,11 +14,17 @@ interface Props {
 }
 
 export default function ProjectsForm({ initialData = [], onSubmit, onNext, onBack }: Props) {
-    const { register, control, handleSubmit } = useForm({
+    const { register, control, handleSubmit, reset } = useForm({
         defaultValues: {
             projects: initialData.length > 0 ? initialData : []
         }
     });
+
+    useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            reset({ projects: initialData });
+        }
+    }, [initialData, reset]);
 
     const { fields, append, remove } = useFieldArray({
         control,

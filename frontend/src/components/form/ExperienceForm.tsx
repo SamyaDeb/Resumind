@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Experience } from '@/types/resume';
 import { Plus, Trash2 } from 'lucide-react';
@@ -13,11 +13,17 @@ interface Props {
 }
 
 export default function ExperienceForm({ initialData = [], onSubmit, onNext, onBack }: Props) {
-    const { register, control, handleSubmit, watch } = useForm({
+    const { register, control, handleSubmit, watch, reset } = useForm({
         defaultValues: {
             experiences: initialData.length > 0 ? initialData : []
         }
     });
+
+    useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            reset({ experiences: initialData });
+        }
+    }, [initialData, reset]);
 
     const { fields, append, remove } = useFieldArray({
         control,

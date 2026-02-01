@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { PersonalInfo } from '@/types/resume';
+import { useEffect } from 'react';
 
 const schema = z.object({
     fullName: z.string().optional().or(z.literal('')),
@@ -23,10 +24,17 @@ interface Props {
 }
 
 export default function PersonalInfoForm({ initialData, onSubmit, onNext }: Props) {
-    const { register, handleSubmit, formState: { errors } } = useForm<PersonalInfo>({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<PersonalInfo>({
         resolver: zodResolver(schema),
         defaultValues: initialData,
     });
+
+    // Reset form when initialData changes (e.g., loading demo data)
+    useEffect(() => {
+        if (initialData) {
+            reset(initialData);
+        }
+    }, [initialData, reset]);
 
     const handleFormSubmit = (data: PersonalInfo) => {
         onSubmit(data);

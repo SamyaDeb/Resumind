@@ -3,6 +3,7 @@
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Education } from '@/types/resume';
 import { Plus, Trash2 } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface Props {
     initialData?: Education[];
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export default function EducationForm({ initialData = [], onSubmit, onNext, onBack }: Props) {
-    const { register, control, handleSubmit } = useForm({
+    const { register, control, handleSubmit, reset } = useForm({
         defaultValues: {
             educations: initialData.length > 0 ? initialData : [{
                 id: crypto.randomUUID(),
@@ -26,6 +27,12 @@ export default function EducationForm({ initialData = [], onSubmit, onNext, onBa
             }]
         }
     });
+
+    useEffect(() => {
+        if (initialData && initialData.length > 0) {
+            reset({ educations: initialData });
+        }
+    }, [initialData, reset]);
 
     const { fields, append, remove } = useFieldArray({
         control,
