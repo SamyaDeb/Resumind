@@ -37,6 +37,7 @@ export default function PersonalInfoForm({ initialData, onSubmit, onNext }: Prop
     }, [initialData, reset]);
 
     const handleFormSubmit = (data: PersonalInfo) => {
+        console.log('PersonalInfoForm submitting data:', JSON.stringify(data));
         onSubmit(data);
         onNext();
     };
