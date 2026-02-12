@@ -15,10 +15,7 @@ const ResumeFormWizard = dynamic(() => import('@/components/form/ResumeFormWizar
 });
 import { auth } from '@/lib/firebase';
 import DownloadButton from '@/components/resume/DownloadButton';
-import LatexPreview from '@/components/resume/LatexPreview'; // Optional if we want to show it
-
-// Sample data that matches the LaTeX template structure
-
+import LatexPreview from '@/components/resume/LatexPreview';
 
 export default function BuilderPage() {
     const router = useRouter();
