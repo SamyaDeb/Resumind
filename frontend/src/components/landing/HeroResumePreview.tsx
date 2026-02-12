@@ -1,4 +1,4 @@
-import Image from 'next/image';
+
 
 export default function HeroResumePreview() {
     return (
@@ -22,19 +22,21 @@ export default function HeroResumePreview() {
 
                 {/* Resume Header */}
                 <div className="flex gap-5 border-b border-neutral-100 pb-5 mb-5 items-center">
-                    <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-white shadow-md ring-1 ring-neutral-100">
-                        <Image
-                            src="/images/samya-profile.jpg"
-                            alt="Samya Deb Biswas"
-                            fill
-                            className="object-cover"
-                        />
+                    <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-white shadow-md ring-1 ring-neutral-100 bg-neutral-200">
+                        {/* 
+                         * Switched to a generic placeholder or keep image if it's a generic asset. 
+                         * Assuming 'samya-profile.jpg' is specific, let's use a generic colored div or initials if image fails, 
+                         * but since I can't check if image exists easily, I will just change the text.
+                         */}
+                        <div className="w-full h-full flex items-center justify-center bg-violet-100 text-violet-600 font-bold text-2xl">
+                            AM
+                        </div>
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
-                        <h3 className="text-xl font-bold text-neutral-900 uppercase tracking-tight leading-tight">SAMYA DEB BISWAS</h3>
+                        <h3 className="text-xl font-bold text-neutral-900 uppercase tracking-tight leading-tight">ALEX MORGAN</h3>
                         <div className="text-[10px] text-neutral-500 mt-1 space-y-0.5">
-                            <p>New Delhi, India • +91 98765 43210</p>
-                            <p>samya.biswas@example.com</p>
+                            <p>San Francisco, CA • +1 (555) 123-4567</p>
+                            <p>alex.morgan@example.com</p>
                         </div>
                     </div>
                 </div>
