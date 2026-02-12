@@ -14,3 +14,19 @@ An intelligent resume builder powered by AI that helps you create professional, 
 - **User Authentication**: Secure login with Firebase Authentication
 - **Cloud Storage**: Save and retrieve your resumes from the cloud
 
+## 🛠️ Tech Stack
+
+### Frontend
+- **Next.js 15** - React framework for production
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Re-usable component library
+- **Firebase Auth** - User authentication
+
+### Backend
+- **Node.js & Express** - Server runtime and framework
+- **TypeScript** - Type-safe backend development
+- **Firebase Admin** - Cloud Firestore database
+- **LaTeX** - Professional document generation
+- **OpenAI API** - AI-powered content enhancement
+
