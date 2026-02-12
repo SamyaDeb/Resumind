@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import LiquidBackground from '@/components/LiquidBackground';
+import ClientLiquidBackground from '@/components/ClientLiquidBackground';
 import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
@@ -35,7 +35,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <LiquidBackground />
+        <ClientLiquidBackground />
         <Toaster position="top-center" toastOptions={{
           style: {
             background: '#333',
