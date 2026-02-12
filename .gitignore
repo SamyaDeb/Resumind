@@ -4,8 +4,12 @@ dist
 build
 .env
 .env.local
+.env.production
 .DS_Store
 *.log
 coverage
 .vscode
 serviceAccountKey.json
+
+# Keep example files
+!.env.example
