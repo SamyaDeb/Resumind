@@ -22,16 +22,18 @@ export default function HeroResumePreview() {
 
                 {/* Resume Header */}
                 <div className="flex gap-5 border-b border-neutral-100 pb-5 mb-5 items-center">
-                    <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-white shadow-md ring-1 ring-neutral-100 bg-gradient-to-br from-violet-100 to-violet-200 flex items-center justify-center">
-                        <svg className="w-12 h-12 text-violet-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                        </svg>
+                    <div className="relative w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-white shadow-md ring-1 ring-neutral-100 bg-neutral-200">
+                        <img
+                            src="/images/samya-profile.jpg"
+                            alt="Samya Deb Biswas"
+                            className="w-full h-full object-cover"
+                        />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
-                        <h3 className="text-xl font-bold text-neutral-900 uppercase tracking-tight leading-tight">Your Name Here</h3>
+                        <h3 className="text-xl font-bold text-neutral-900 uppercase tracking-tight leading-tight">Samya Deb Biswas</h3>
                         <div className="text-[10px] text-neutral-500 mt-1 space-y-0.5">
-                            <p>City, State • Phone Number</p>
-                            <p>your.email@example.com</p>
+                            <p>San Francisco, CA • +1 (555) 123-4567</p>
+                            <p>samya.deb.biswas@example.com</p>
                         </div>
                     </div>
                 </div>
