@@ -21,136 +21,13 @@ const STEPS = [
     'Summary'
 ];
 
-const DUMMY_DATA: ResumeData = {
-    personalInfo: {
-        fullName: "Samya Deb Biswas",
-        title: "Blockchain Developer",
-        email: "sammodeb28@gmail.com",
-        phone: "+91-7384221106",
-        location: "Kolkata, India",
-        linkedin: "https://linkedin.com/in/samya",
-        github: "https://github.com/SamyaDeb",
-        portfolio: ""
-    },
-    summary: "Full-stack Blockchain Developer experienced in building dApps and smart contracts using Solidity on Ethereum/Polygon. Skilled in React, Next.js, TypeScript, and Node.js, delivering secure, scalable, and user-friendly web3 applications. Strong focus on clean, efficient code and practical blockchain solutions.",
-    experience: [
-        {
-            id: "1",
-            company: "Uplers",
-            position: "Blockchain Developer Intern",
-            location: "Remote",
-            startDate: "2025-10",
-            endDate: "2025-12",
-            current: false,
-            bullets: [
-                "Developed and audited Solidity smart contracts, optimizing logic and reducing gas usage by 15%.",
-                "Integrated smart contracts with a React.js frontend using ethers.js for real-time dApp interactions.",
-                "Implemented wallet authentication, transaction signing, and reusable UI components to improve UX.",
-                "Collaborated with senior developers to debug and deliver scalable smart contract–frontend architecture."
-            ]
-        }
-    ],
-    education: [
-        {
-            id: "1",
-            school: "Government College Of Engineering And Leather Technology",
-            degree: "B.Tech. Computer Science & Engineering",
-            field: "Computer Science",
-            location: "Kolkata, India",
-            startDate: "2024-06",
-            endDate: "2028-06",
-            gpa: "7.0 / 10"
-        }
-    ],
-    skills: [
-        {
-            category: "Programming Languages",
-            items: ["JavaScript", "TypeScript", "Solidity", "C", "C++", "Python", "HTML", "Rust"]
-        },
-        {
-            category: "Frameworks",
-            items: ["React.js", "Next.js", "Node.js", "Express.js", "Tailwind CSS", "Bootstrap", "ShadCN"]
-        },
-        {
-            category: "Tools",
-            items: ["Git", "GitHub", "Docker", "VS Code", "Cursor", "Recoil", "Hardhat", "RainbowKit"]
-        },
-        {
-            category: "Databases",
-            items: ["MongoDB", "MySQL", "PostgreSQL", "Prisma", "Firebase", "SuperBase"]
-        }
-    ],
-    projects: [
-        {
-            id: "1",
-            title: "Zentra – Microlending dApp",
-            description: "Built a full-stack decentralized microlending platform with on-chain loan creation, approval, and repayment workflows. Implemented a circle-based collateral model inspired by Grameen Bank to reduce default risk using smart contracts.",
-            technologies: ["Solidity", "Polygon", "Web3.js"],
-            year: "2025",
-            link: ""
-        },
-        {
-            id: "2",
-            title: "Relifo – Decentralized Relief & Donation Platform",
-            description: "Developed a transparent blockchain-based donation system ensuring traceable and tamper-proof fund distribution. Designed smart contracts to eliminate intermediaries and improve trust in disaster relief contributions.",
-            technologies: ["Blockchain", "Smart Contracts"],
-            year: "2026",
-            link: ""
-        },
-        {
-            id: "3",
-            title: "OnMint – NFT Minting Platform",
-            description: "Built an NFT minting and management platform with wallet-based authentication and metadata storage on IPFS. Enabled creators to mint, view, and manage NFTs through a user-friendly decentralized interface.",
-            technologies: ["Solidity", "IPFS", "Web3"],
-            year: "2026",
-            link: ""
-        },
-        {
-            id: "4",
-            title: "ZenPay – Web3 Payment Solution",
-            description: "Created a decentralized payment system enabling peer-to-peer crypto transactions with minimal user friction. Focused on simplifying Web3 payments for everyday transactions using secure on-chain logic.",
-            technologies: ["Blockchain", "Smart Contracts"],
-            year: "2026",
-            link: ""
-        }
-    ],
-    certifications: [
-        {
-            id: "1",
-            name: "JGEC Sristi Techfest Hackathon Winner",
-            issuer: "JGEC",
-            date: "2025",
-            description: "Winner recognized for building an innovative full-stack blockchain solution."
-        },
-        {
-            id: "2",
-            name: "East India Blockchain Summit 2.0 Hackathon",
-            issuer: "EIBS",
-            date: "2025",
-            description: "Selected among 2,000+ participants and made Stablecoin based Disaster Relief Solution."
-        },
-        {
-            id: "3",
-            name: "On Block 2026 Hackathon",
-            issuer: "IIT Kharagpur",
-            date: "2026",
-            description: "Secured a position in the Top 15 teams."
-        },
-        {
-            id: "4",
-            name: "TMSL Educathon 2.0 Hackathon Finalist",
-            issuer: "TMSL",
-            date: "2025",
-            description: "Selected among 1400+ participants across 200+ colleges."
-        }
-    ]
-};
+
 
 export default function ResumeFormWizard({ onComplete, initialData }: { onComplete: (data: ResumeData) => void, initialData?: Partial<ResumeData> }) {
     const [currentStep, setCurrentStep] = useState(0);
-    // Use DUMMY_DATA if initialData is empty or null, effectively auto-filling the form
+    // Use initialData if provided, otherwise start fresh
     const [resumeData, setResumeData] = useState<Partial<ResumeData>>(
-        (initialData && Object.keys(initialData).length > 0) ? initialData : DUMMY_DATA
+        (initialData && Object.keys(initialData).length > 0) ? initialData : {}
     );
 
     // Sync resumeData when initialData prop changes from parent
@@ -177,17 +54,9 @@ export default function ResumeFormWizard({ onComplete, initialData }: { onComple
         onComplete(finalData);
     }
 
-    const fillDemoData = () => {
-        if (confirm("This will overwrite your current progress with demo data. Are you sure?")) {
-            setResumeData(DUMMY_DATA);
-            localStorage.setItem('resumeDraft', JSON.stringify(DUMMY_DATA));
-            // Optional: Move to the last step or verify step to show it's filled
-            // setCurrentStep(STEPS.length - 1); 
-        }
-    };
-
     return (
         <div className="max-w-6xl mx-auto p-6 md:p-8">
+            {/* Progress Bar */}
             {/* Progress Bar */}
             <div className="mb-12 relative">
                 <div className="flex justify-between mb-4 px-2">
