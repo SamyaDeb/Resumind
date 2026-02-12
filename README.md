@@ -30,3 +30,63 @@ An intelligent resume builder powered by AI that helps you create professional, 
 - **LaTeX** - Professional document generation
 - **OpenAI API** - AI-powered content enhancement
 
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ installed
+- Firebase project set up
+- OpenAI API key
+- LaTeX distribution (for PDF generation)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/SamyaDeb/Resumind.git
+   cd Resumind
+   ```
+
+2. **Install Frontend Dependencies**
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+3. **Install Backend Dependencies**
+   ```bash
+   cd backend
+   npm install
+   ```
+
+4. **Configure Environment Variables**
+   
+   Create `.env` file in the backend directory:
+   ```env
+   OPENAI_API_KEY=your_openai_api_key
+   FIREBASE_PROJECT_ID=your_project_id
+   FIREBASE_CLIENT_EMAIL=your_client_email
+   FIREBASE_PRIVATE_KEY=your_private_key
+   ```
+
+5. **Run the Development Servers**
+   
+   Backend:
+   ```bash
+   cd backend
+   npm run dev
+   ```
+   
+   Frontend:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+6. **Open your browser**
+   
+   Navigate to `http://localhost:3000`
+
+## 📝 License
+
+This project is open source and available under the MIT License.
+
