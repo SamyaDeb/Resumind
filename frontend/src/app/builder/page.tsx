@@ -49,7 +49,8 @@ export default function BuilderPage() {
 
             // Then try to fetch from server
             const token = await user?.getIdToken();
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/resume`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+            const response = await axios.get(`${apiUrl}/api/resume`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -75,7 +76,8 @@ export default function BuilderPage() {
 
         try {
             const token = await user?.getIdToken();
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/resume/save`, { data }, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+            await axios.post(`${apiUrl}/api/resume/save`, { data }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -97,7 +99,8 @@ export default function BuilderPage() {
             const generatePreview = async () => {
                 try {
                     console.log('Generating preview with data:', JSON.stringify(finalData.personalInfo));
-                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/resume/download`, {
+                    const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+                    const response = await axios.post(`${apiUrl}/api/resume/download`, {
                         templateId: 'modern',
                         data: finalData
                     }, {

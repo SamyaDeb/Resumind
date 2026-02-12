@@ -15,7 +15,8 @@ export default function DownloadButton({ templateId, data, onOptimize }: any) {
 
         try {
             const endpoint = optimize ? '/api/resume/optimize-and-download' : '/api/resume/download';
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+            const response = await fetch(`${apiUrl}${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ templateId, data })
