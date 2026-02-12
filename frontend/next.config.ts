@@ -9,12 +9,8 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
   
-  // Production optimizations
-  swcMinify: true,
-  
   // Image optimization
   images: {
-    domains: ['firebasestorage.googleapis.com'],
     remotePatterns: [
       {
         protocol: 'https',
